@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/mongo
+      NODE_ENV: development
+      JWT_SECRET: my_secret
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+
+#  frontend:
+#    build: ./frontend
+#    restart: always
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - backend
+
+volumes:
+  mongodb-data:
